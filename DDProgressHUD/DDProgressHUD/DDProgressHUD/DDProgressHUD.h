@@ -35,7 +35,7 @@
 + (void)setBackgroundViewCornerRadius:(CGFloat)radius;
 /// 设置背景颜色，默认为0xF0F0F0，具体参照：DDDefaultSetup.h为准
 + (void)setBackgroundViewColor:(UIColor *)color;
-/// 设置字体，默认为偏好设置字体，具体参照：DDDefaultSetup.h为准
+/// 设置字体，默认为偏好设置字体
 + (void)setFont:(UIFont *)font;
 
 /**

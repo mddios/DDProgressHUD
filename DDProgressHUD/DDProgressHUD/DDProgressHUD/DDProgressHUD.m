@@ -90,7 +90,7 @@
                 hudWidth = hudHeight * kMinimumWidthRatioHeight;
             }
         }
-        
+
         [hud.backgroundView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         if (status) {
             hud.statusLbl.text = status;
@@ -101,7 +101,6 @@
         hud.backgroundView.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - hudWidth) / 2, ([UIScreen mainScreen].bounds.size.height - hudHeight) / 2, hudWidth, hudHeight);
         
         [hud.backgroundView addSubview:hud.infiniteLoopView];
-        
         [hud showWithView:hud.backgroundView andDuration:duration];
     }];
 }

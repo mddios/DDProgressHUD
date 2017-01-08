@@ -12,7 +12,7 @@
 #import "DDInfiniteLoopView.h"
 #import "DDProgressHUD.h"
 
-@interface ViewController () {
+@interface ViewController () <UIAlertViewDelegate>{
     CGFloat _progress;
 }
 @property (weak, nonatomic) IBOutlet UITextField *statusText;
@@ -24,7 +24,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // 点击maskview后视图自动消失
     [DDProgressHUD setMaskViewAutomaticHidden:YES];
     // 设置无限旋转的图片
@@ -50,7 +49,7 @@
         self.timer = nil;
     }
     _progress = 0;
-    self.timer = [NSTimer timerWithTimeInterval:0.05 target:self selector:@selector(showProgress) userInfo:nil repeats:YES];
+    self.timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(showProgress) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 - (IBAction)showProgressWithStatus:(UIButton *)sender {
@@ -106,20 +105,20 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(sender.frame.size.width - 100, 0, 100, sender.frame.size.height)];
     [sender addSubview:view];
     [view showActivityView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [view hiddenActivityView];
         [view removeFromSuperview];
     });
 }
 
 - (void)showProgressAndStatus {
-    _progress += 0.02;
+    _progress += 0.05;
     NSString *str = @"Hello DDProgressHUD";
     if (_progress > 0.3) {
-        str = @"这是一个描述长度可变的进度弹窗";
+        str = @"这是一个文字长度可变的进度弹窗";
     }
-    if (_progress > 0.5) {
-        str = @"这是一个描述长度可变有空行的进度弹窗\n\r\n\r\n\r\n\r\n\r这是一个描述长度可变有空行的进度弹窗";
+    if (_progress > 0.6) {
+        str = @"这是一个文字长度可变有空行的进度弹窗\n\r\n\r\n\r\n\r\n\r这是一个文字长度可变有空行的进度弹窗";
     }
     [DDProgressHUD showProgress:_progress withStatus:str];
     if (_progress > 1) {
@@ -129,7 +128,7 @@
 }
 
 - (void)showProgress {
-    _progress += 0.02;
+    _progress += 0.1;
     [DDProgressHUD showProgress:_progress];
     if (_progress > 1) {
         [self.timer invalidate];
