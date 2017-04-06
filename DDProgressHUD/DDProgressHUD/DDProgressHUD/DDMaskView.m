@@ -27,12 +27,10 @@
 
 - (void)show {
     if (!self.superview) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.alpha = 0;
-            [self addToWindow];
-            [UIView animateWithDuration:kShowAnimateDuration animations:^{
-                self.alpha = 1;
-            }];
+        self.alpha = 0;
+        [self addToWindow];
+        [UIView animateWithDuration:kShowAnimateDuration animations:^{
+            self.alpha = 1;
         }];
     } else {
         [self.superview bringSubviewToFront:self];
@@ -41,12 +39,10 @@
 
 - (void)dismiss {
     if (self.superview) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [UIView animateWithDuration:kDismissAnimateDuration animations:^{
-                self.alpha = 0;
-            } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-            }];
+        [UIView animateWithDuration:kDismissAnimateDuration animations:^{
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
         }];
     }
 }

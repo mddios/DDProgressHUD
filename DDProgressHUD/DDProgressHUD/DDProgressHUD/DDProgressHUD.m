@@ -303,13 +303,13 @@
  @param delay 等待多长时间后取消显示，单位秒
  */
 - (void)dismissWithDelay:(NSTimeInterval)delay {
-    // 如果已经取消，则直接返回
-    if (!self.maskView.superview) {
-        return;
-    }
     __weak DDProgressHUD *weakSelf = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         __strong DDProgressHUD *strongSelf = weakSelf;
+        // 如果已经取消，则直接返回
+        if (!self.maskView.superview) {
+            return;
+        }
         if (strongSelf) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [strongSelf.maskView dismiss];
