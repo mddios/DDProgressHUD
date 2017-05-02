@@ -1,13 +1,13 @@
 # DDProgressHUD
 Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示，高度自定义
 
-##版本记录
+## 版本记录
 
 * V1.0.0：最初版本
 * V1.0.1：解决show，dismiss方法执行不同步问题
 
 
-##DDProgressHUD的介绍
+## DDProgressHUD的介绍
 
 提供了四种类型的展示：
 
@@ -36,8 +36,8 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 
 ![小菊花](http://7xs4tc.com1.z0.glb.clouddn.com/FiveAnimate_ActivityIndicatorView.gif)
 
-##DDProgressHUD的简单使用与方法介绍
-####准备
+## DDProgressHUD的简单使用与方法介绍
+#### 准备
 
 * 下载代码：使用很简单，将工程从github：[https://github.com/mddios/DDProgressHUD](https://github.com/mddios/DDProgressHUD)下载下来，将DDProgressHUD文件全部拖入工程
 * 包含`DDProgressHUD.h`头文件即可使用
@@ -47,7 +47,8 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 
 > 为了方便管理与自定义，建议还是fork一份到自己的github
 
-####简单使用与方法介绍
+#### 简单使用与方法介绍
+
 * 第一类显示提供三个类方法：无限循化的图片
 
 ```
@@ -119,7 +120,7 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 - (BOOL)hiddenActivityView;
 ```
 
-##DDProgressHUD的全局设置
+## DDProgressHUD的全局设置
 设置有两种：
 
 * 头文件里面的默认设置（宏定义），相当于初始化，全局有效。位置：`DDDefaultSetup.h`头文件
@@ -137,7 +138,7 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 
 也可以根据上面显示类别和view的层级关系，分为以下几种
 
-####1 maskview，蒙版的设置
+#### 1 maskview，蒙版的设置
 首先默认设置，一共有4个
 
 ```
@@ -157,7 +158,7 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 
 另外还有`setMaskViewAutomaticHidden:`，即点击蒙版后是否自动消失视图，即调用dismiss方法。无论YES或者NO，点击后都会发送一个通知`static const NSNotificationName DDMaskViewDidClicked = @"DDMaskViewDidClicked";`
 
-####2 白色的背景设置
+#### 2 白色的背景设置
 
 头文件默认设置
 
@@ -195,7 +196,7 @@ Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示�
 + (void)setFont:(UIFont *)font;
 ```
 
-####3 弹窗、无限旋转的图片、进度圈的设置
+#### 3 弹窗、无限旋转的图片、进度圈的设置
 
 共同的设置，即文字（lbl）字体：
 

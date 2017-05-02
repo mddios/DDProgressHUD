@@ -35,14 +35,14 @@
 #pragma mark - test
 
 /**
- 1.01版本解决下面的调用产生的问题
+ 1.01版本解决下面的调用产生的问题，执行不同步
  */
 - (void)v101test {
-     [DDProgressHUD show];
-    [DDProgressHUD dismiss];
+    //[DDProgressHUD show];
+    //[DDProgressHUD dismiss];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-    //    [DDProgressHUD dismiss];
-     //   [DDProgressHUD show];
+        [DDProgressHUD dismiss];
+        [DDProgressHUD show];
     });
 }
 
