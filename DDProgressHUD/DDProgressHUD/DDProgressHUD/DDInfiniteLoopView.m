@@ -73,7 +73,7 @@
  设置属性时，会从新创建ringlayer
  */
 - (void)setFrame:(CGRect)frame {
-    if(!CGRectEqualToRect(frame, super.frame)) {
+    if (!CGRectEqualToRect(frame, super.frame)) {
         [super setFrame:frame];
         [self addLoopImageLayer];
     }

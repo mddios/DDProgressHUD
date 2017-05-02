@@ -11,7 +11,6 @@
 
 @implementation DDMaskView
 
-
 /**
  将frame写死
  */
@@ -26,28 +25,50 @@
 }
 
 - (void)show {
-    if (!self.superview) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.alpha = 0;
-            [self addToWindow];
-            [UIView animateWithDuration:kShowAnimateDuration animations:^{
-                self.alpha = 1;
+    __weak DDMaskView *weakSelf = self;
+    dispatch_block_t block = ^{
+        __strong DDMaskView *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return ;
+        }
+        if (!self.superview) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                self.alpha = 0;
+                [self addToWindow];
+                [UIView animateWithDuration:kShowAnimateDuration animations:^{
+                    self.alpha = 1;
+                }];
             }];
-        }];
+        } else {
+            [self.superview bringSubviewToFront:self];
+        }
+    };
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
     } else {
-        [self.superview bringSubviewToFront:self];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block();
+        }];
     }
+    
 }
 
 - (void)dismiss {
-    if (self.superview) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [UIView animateWithDuration:kDismissAnimateDuration animations:^{
-                self.alpha = 0;
-            } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-            }];
+    dispatch_block_t block = ^{
+        [UIView animateWithDuration:kDismissAnimateDuration animations:^{
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
         }];
+    };
+    if (self.superview) {
+        if ([[NSThread currentThread] isMainThread]) {
+            block();
+        } else {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block();
+            }];
+        }
     }
 }
 
@@ -67,14 +88,21 @@
 }
 
 + (void)showWithSubview:(UIView *)subview andTime:(NSTimeInterval) duration {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    dispatch_block_t block = ^{
         DDMaskView *maskview = [[self alloc] init];
         [maskview addSubview:subview];
         [maskview show];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [maskview dismiss];
         });
-    }];
+    };
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block();
+        }];
+    }
 }
 
 - (void)addToWindow {

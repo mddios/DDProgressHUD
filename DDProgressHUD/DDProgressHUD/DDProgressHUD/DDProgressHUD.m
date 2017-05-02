@@ -65,7 +65,7 @@
 }
 
 + (void)showWithStatus:(NSString *)status andDuration:(NSTimeInterval)duration{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    dispatch_block_t block = ^{
         DDProgressHUD *hud = [DDProgressHUD shareProgress];
         // 如果没有str则为0
         CGFloat viewMargin = kViewMargin;
@@ -90,7 +90,7 @@
                 hudWidth = hudHeight * kMinimumWidthRatioHeight;
             }
         }
-
+        
         [hud.backgroundView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         if (status) {
             hud.statusLbl.text = status;
@@ -102,7 +102,14 @@
         
         [hud.backgroundView addSubview:hud.infiniteLoopView];
         [hud showWithView:hud.backgroundView andDuration:duration];
-    }];
+    };
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block();
+        }];
+    }
 }
 
 + (void)showProgress:(CGFloat)progress {
@@ -278,8 +285,11 @@
 - (void)showWithView:(UIView *)view andDuration:(NSTimeInterval)duration {
     // DDProgressHUD为单利，可以不用weak，但应有较好的编程习惯
     __weak DDProgressHUD *weakSelf = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    dispatch_block_t block = ^{
         __strong DDProgressHUD *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return ;
+        }
         if (![view.superview isMemberOfClass:[DDMaskView class]]) {
             [strongSelf.maskView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
             [strongSelf.maskView addSubview:view];
@@ -293,33 +303,50 @@
             [strongSelf.durationTimer invalidate];
             strongSelf.durationTimer = nil;
         }
-    }];
+    };
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block();
+        }];
+    }
 }
 
 
 /**
  取消显示最终调用函数
 
- @param delay 等待多长时间后取消显示，单位秒
+ @param delay 等待多长时间后取消显示，单位秒，延迟0.01s，保证show方法的优先添加到主队列
  */
 - (void)dismissWithDelay:(NSTimeInterval)delay {
-    // 如果已经取消，则直接返回
-    if (!self.maskView.superview) {
-        return;
-    }
-    __weak DDProgressHUD *weakSelf = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        __strong DDProgressHUD *strongSelf = weakSelf;
-        if (strongSelf) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [strongSelf.maskView dismiss];
-                [strongSelf.backgroundView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-                if (strongSelf.backgroundView.superview) {
-                    [strongSelf.backgroundView removeFromSuperview];
+    [[NSThread currentThread] isMainThread];
+    dispatch_block_t block = ^{
+        // 如果已经取消，则直接返回
+        __weak DDProgressHUD *weakSelf = self;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            __strong DDProgressHUD *strongSelf = weakSelf;
+            if (strongSelf) {
+                if (!self.maskView.superview) {
+                    return;
                 }
-            });
-        }
-    }];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [strongSelf.maskView dismiss];
+                    [strongSelf.backgroundView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                    if (strongSelf.backgroundView.superview) {
+                        [strongSelf.backgroundView removeFromSuperview];
+                    }
+                });
+            }
+        }];
+    };
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block();
+        }];
+    }
 }
 
 #pragma mark - set 设置

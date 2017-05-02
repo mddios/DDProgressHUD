@@ -1,6 +1,12 @@
 # DDProgressHUD
 Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示，高度自定义
 
+##版本记录
+
+* V1.0.0：最初版本
+* V1.0.1：解决show，dismiss方法执行不同步问题
+
+
 ##DDProgressHUD的介绍
 
 提供了四种类型的展示：

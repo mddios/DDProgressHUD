@@ -28,20 +28,41 @@
     [DDProgressHUD setMaskViewAutomaticHidden:YES];
     // 设置无限旋转的图片
 //    [DDProgressHUD setLoopImage:[UIImage imageNamed:@"refresh"]];
+    
+    [self v101test];
 }
+
+#pragma mark - test
+
+/**
+ 1.01版本解决下面的调用产生的问题
+ */
+- (void)v101test {
+     [DDProgressHUD show];
+    [DDProgressHUD dismiss];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    //    [DDProgressHUD dismiss];
+     //   [DDProgressHUD show];
+    });
+}
+
+#pragma mark - action
 
 - (IBAction)show:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD show];
 }
+
 - (IBAction)showWithStatus:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showWithStatus:self.statusStr];
 }
+
 - (IBAction)showWithStatusAndDuration:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showWithStatus:self.statusStr andDuration:1.0];
 }
+
 - (IBAction)showProgress:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     if (self.timer) {
@@ -52,6 +73,7 @@
     self.timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(showProgress) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
+
 - (IBAction)showProgressWithStatus:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     if (self.timer) {
@@ -62,26 +84,32 @@
     self.timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(showProgressAndStatus) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
+
 - (IBAction)showSuccessImage:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showSuccessImage];
 }
+
 - (IBAction)showSuccessImageWithInfo:(UIButton *)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showSuccessImageWithInfo:self.statusStr];
 }
+
 - (IBAction)showErrorImage:(id)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showErrorImage];
 }
+
 - (IBAction)showErrorImageWithInfo:(id)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showErrorImageWithInfo:self.statusStr];
 }
+
 - (IBAction)showImageandInfo:(id)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showImage:[UIImage imageNamed:@"infoImage"] andInfo:@"自定义图片"];
 }
+
 - (IBAction)showImageAndInfoAndDuration:(id)sender {
     [self.statusText resignFirstResponder];
     [DDProgressHUD showImage:[UIImage imageNamed:@"infoImage"] andInfo:@"自定义图片，显示时间为2s" andDuration:2];
@@ -110,6 +138,8 @@
         [view removeFromSuperview];
     });
 }
+
+#pragma mark - 辅助函数
 
 - (void)showProgressAndStatus {
     _progress += 0.05;

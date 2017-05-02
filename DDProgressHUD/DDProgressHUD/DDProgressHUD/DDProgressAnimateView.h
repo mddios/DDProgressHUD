@@ -11,7 +11,6 @@
 @interface DDProgressAnimateView : UIView
 /// 进度0-1
 @property (nonatomic, assign) CGFloat progress;
-
 /// 圆弧半径
 @property (nonatomic, assign) CGFloat ringRadius;
 /// 圆弧线宽度
