@@ -6,6 +6,8 @@
 //  Copyright © 2016年 coohua.mdd. All rights reserved.
 //
 
+/// 当前版本V1.0.2
+
 #import <UIKit/UIKit.h>
 
 @interface DDProgressHUD : UIView

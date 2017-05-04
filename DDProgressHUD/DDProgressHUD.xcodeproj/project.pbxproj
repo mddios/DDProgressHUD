@@ -149,6 +149,7 @@
 		60B312741E05237200890427 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = DD;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = coohua.mdd;
 				TargetAttributes = {

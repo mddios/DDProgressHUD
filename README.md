@@ -1,6 +1,10 @@
 # DDProgressHUD
 Progress 进度条，UIActivityIndicatorView 小菊花，弹窗，状态显示，高度自定义
 
+## 使用
+
+* pod 使用：`pod 'MDDProgressHUD'`(DDProgressHUD被别人占用)
+
 ## 版本记录
 
 * V1.0.0：最初版本
